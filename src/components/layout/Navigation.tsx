@@ -1,7 +1,6 @@
 'use client';
 
 import { useNavigation } from '@/contexts/NavigationContext';
-import { useRouter } from 'next/navigation';
 
 const navItems = [
   { name: 'about', label: 'About me' },
@@ -13,18 +12,21 @@ const navItems = [
 
 export default function Navigation() {
   const { activeSection } = useNavigation();
-  const router = useRouter();
 
   // Debug logging removed
 
   const handleNavClick = (sectionName: string) => {
+    // Prevent default browser navigation and use only context
     if (activeSection === sectionName) {
       // Same section clicked - go to home (close details)
-      router.push('/');
+      window.history.replaceState(null, '', '/');
     } else {
-      // Different section - navigate to that section
-      router.push(`/${sectionName}`);
+      // Different section - update URL without navigation
+      window.history.replaceState(null, '', `/${sectionName}`);
     }
+    
+    // Force context update after URL change
+    window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
   const isActive = (sectionName: string) => {

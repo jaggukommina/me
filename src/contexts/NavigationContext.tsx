@@ -27,32 +27,48 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
 
   // Initialize state based on current route
   useEffect(() => {
-    // Normalize pathname - remove base path if present
-    let normalizedPath = pathname.replace(/^\/me/, '') || '/';
-    
-    // Remove trailing slash except for root
-    if (normalizedPath !== '/' && normalizedPath.endsWith('/')) {
-      normalizedPath = normalizedPath.slice(0, -1);
-    }
-
-    if (normalizedPath === '/') {
-      // Root path - close details
-      setState({
-        activeSection: null,
-        isDetailsOpen: false,
-      });
-    } else {
-      // Non-root path - extract section name and open details
-      const sectionName = normalizedPath.replace('/', '');
-      const validSections = ['about', 'skills', 'experience', 'education', 'contact'];
+    const updateStateFromPath = () => {
+      // Get current path from window.location for more accurate reading
+      let normalizedPath = window.location.pathname.replace(/^\/me/, '') || '/';
       
-      if (validSections.includes(sectionName)) {
-        setState({
-          activeSection: sectionName,
-          isDetailsOpen: true,
-        });
+      // Remove trailing slash except for root
+      if (normalizedPath !== '/' && normalizedPath.endsWith('/')) {
+        normalizedPath = normalizedPath.slice(0, -1);
       }
-    }
+
+      if (normalizedPath === '/') {
+        // Root path - close details
+        setState({
+          activeSection: null,
+          isDetailsOpen: false,
+        });
+      } else {
+        // Non-root path - extract section name and open details
+        const sectionName = normalizedPath.replace('/', '');
+        const validSections = ['about', 'skills', 'experience', 'education', 'contact'];
+        
+        if (validSections.includes(sectionName)) {
+          setState({
+            activeSection: sectionName,
+            isDetailsOpen: true,
+          });
+        }
+      }
+    };
+
+    // Initial state setup
+    updateStateFromPath();
+
+    // Listen for popstate events (back/forward navigation)
+    const handlePopState = () => {
+      updateStateFromPath();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, [pathname]);
 
   const openSection = useCallback((section: string) => {

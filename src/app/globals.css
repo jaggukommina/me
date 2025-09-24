@@ -88,7 +88,9 @@ body {
   margin: 0;
   box-sizing: border-box;
   overflow: hidden;
-  /* Remove transition from body to prevent layout jumps */
+  /* Optimize for smooth transitions */
+  will-change: auto;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 body.opened {
@@ -292,7 +294,9 @@ body.closed .brief {
   box-sizing: border-box;
   height: 100vh;
   border-right: 1px solid var(--primary-color);
-  /* Remove transition to prevent layout jumps */
+  /* Optimize for smooth rendering */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .explore > button {

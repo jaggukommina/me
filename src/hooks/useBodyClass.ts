@@ -6,6 +6,7 @@ import { useNavigation } from '@/contexts/NavigationContext';
 export function useBodyClass() {
   const { isDetailsOpen } = useNavigation();
   const lastStateRef = useRef<boolean | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const body = document.body;
@@ -17,18 +18,35 @@ export function useBodyClass() {
     
     lastStateRef.current = isDetailsOpen;
     
+    // Clear any pending timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
     // Determine target class based on details state
     const targetClass = isDetailsOpen ? 'opened' : 'closed';
     const otherClass = targetClass === 'closed' ? 'opened' : 'closed';
     
-    // Always apply the class to ensure proper initialization
-    const frameId = requestAnimationFrame(() => {
-      body.classList.remove(otherClass);
-      body.classList.add(targetClass);
-    });
+    // Debounce class changes to prevent rapid switching
+    timeoutRef.current = setTimeout(() => {
+      const frameId = requestAnimationFrame(() => {
+        // Batch DOM operations
+        body.classList.remove(otherClass);
+        body.classList.add(targetClass);
+        
+        // Force layout to prevent jitter
+        void body.offsetHeight;
+      });
+      
+      return () => {
+        cancelAnimationFrame(frameId);
+      };
+    }, 16); // One frame delay
     
     return () => {
-      cancelAnimationFrame(frameId);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
   }, [isDetailsOpen]);
 }
