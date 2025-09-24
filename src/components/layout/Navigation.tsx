@@ -37,12 +37,7 @@ export default function Navigation() {
     
     setCurrentPath(normalizedPath);
     
-    // Temporary debug logging to check active state
-    console.log('Navigation Debug:', {
-      pathname,
-      normalizedPath,
-      currentPath: normalizedPath
-    });
+    // Debug logging removed for production
   }, [pathname]);
 
   const handleNavClick = (path: string) => {
