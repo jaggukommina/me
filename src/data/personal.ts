@@ -9,6 +9,6 @@ export const personalInfo: PersonalInfo = {
     "Explore to know more about me.",
     "Thank you."
   ],
-  profileImage: "https://media.licdn.com/dms/image/D5603AQHiUgEsD5LFvQ/profile-displayphoto-shrink_400_400/0/1683302860662?e=1701907200&v=beta&t=2sX5M2ONGfSDAcluGbHoI1ZBp5tK4RHtrov1_-TTjEg",
+  profileImage: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/person-icon.svg`,
   copyright: "© jaggu kommina - 2023"
 };

@@ -5,12 +5,13 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:github": "GITHUB_PAGES=true next build",
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "type-check": "tsc --noEmit",
     "analyze": "ANALYZE=true npm run build",
-    "export": "next build",
+    "export": "npm run build:github",
     "deploy": "npm run export && touch out/.nojekyll",
     "serve": "npx serve out"
   },

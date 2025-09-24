@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import PortfolioLayout from '@/components/layout/PortfolioLayout';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import { NavigationProvider } from '@/contexts/NavigationContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -29,7 +30,9 @@ export default function RootLayout({
       </head>
       <body>
         <ErrorBoundary>
-          <PortfolioLayout>{children}</PortfolioLayout>
+          <NavigationProvider>
+            <PortfolioLayout>{children}</PortfolioLayout>
+          </NavigationProvider>
         </ErrorBoundary>
       </body>
     </html>

@@ -130,6 +130,10 @@ body.closed > div.explore > button {
   opacity: 0.8;
   transition: all 100ms linear;
   border: 0.25px solid var(--primary-color);
+  /* Ensure visibility in closed state */
+  min-height: 50px;
+  display: block;
+  width: 100%;
 }
 
 body.closed > div.explore > button:hover {
@@ -301,6 +305,10 @@ body.closed .brief {
   box-sizing: border-box;
   border-left: 2px solid transparent;
   transition: all 100ms linear;
+  /* Ensure buttons are always visible */
+  min-height: 50px;
+  display: block;
+  width: 100%;
 }
 
 .explore > button > span {

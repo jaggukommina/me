@@ -1,17 +1,22 @@
 import type { NextConfig } from "next";
 
+// Determine if we're building for GitHub Pages or local development
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+const basePath = isGitHubPages ? '/me' : '';
+
 const nextConfig: NextConfig = {
   // GitHub Pages configuration
   output: 'export',
-  basePath: '/me',
-  assetPrefix: '/me',
+  basePath: basePath,
+  assetPrefix: basePath,
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   distDir: 'out',
   
   // Environment variables
   env: {
-    NEXT_PUBLIC_BASE_PATH: '/me',
+    NEXT_PUBLIC_BASE_PATH: basePath,
+    NEXT_PUBLIC_IS_GITHUB_PAGES: isGitHubPages.toString(),
   },
   
   // Production optimizations

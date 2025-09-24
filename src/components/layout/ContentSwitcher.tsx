@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 // Import all section components directly
 import AboutSection from '@/components/sections/AboutSection';
@@ -11,41 +10,24 @@ import EducationSection from '@/components/sections/EducationSection';
 import ContactSection from '@/components/sections/ContactSection';
 
 const contentMap = {
-  '/about': AboutSection,
-  '/skills': SkillsSection,
-  '/experience': ExperienceSection,
-  '/education': EducationSection,
-  '/contact': ContactSection,
+  'about': AboutSection,
+  'skills': SkillsSection,
+  'experience': ExperienceSection,
+  'education': EducationSection,
+  'contact': ContactSection,
 };
 
 export default function ContentSwitcher() {
-  const pathname = usePathname();
-  const [currentContent, setCurrentContent] = useState<string>('');
-  const [isVisible, setIsVisible] = useState(false);
+  const { activeSection, isDetailsOpen } = useNavigation();
 
-  useEffect(() => {
-    // Normalize pathname
-    const normalizedPath = pathname.replace(/^\/me/, '') || '/';
-    
-    if (normalizedPath === '/') {
-      // Home page - no content
-      setIsVisible(false);
-      setCurrentContent('');
-    } else {
-      // Show content for other pages
-      setCurrentContent(normalizedPath);
-      setIsVisible(true);
-    }
-  }, [pathname]);
-
-  if (!isVisible || !currentContent) {
+  if (!isDetailsOpen || !activeSection) {
     return null;
   }
 
-  const ContentComponent = contentMap[currentContent as keyof typeof contentMap];
+  const ContentComponent = contentMap[activeSection as keyof typeof contentMap];
   
   if (!ContentComponent) {
-    return <div>Page not found</div>;
+    return <div>Section not found</div>;
   }
 
   return (
