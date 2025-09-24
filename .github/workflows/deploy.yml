@@ -43,18 +43,14 @@ jobs:
       - name: Run type checking
         run: npm run type-check
         
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        with:
-          # Automatically inject basePath in your Next.js configuration file and disable
-          # server side image optimization (so it can work properly with static export).
-          static_site_generator: next
-          
       - name: Build with Next.js
         run: npm run build
         
-      - name: Add .nojekyll file
-        run: touch ./out/.nojekyll
+      - name: Verify build output
+        run: |
+          echo "📁 Build output verification:"
+          ls -la ./out/
+          echo "✅ Build completed successfully"
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
