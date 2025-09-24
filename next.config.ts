@@ -37,10 +37,11 @@ const nextConfig: NextConfig = {
 
   // Bundle analyzer (only in development)
   ...(process.env.ANALYZE === 'true' && {
-    webpack: (config: unknown) => {
+    webpack: (config: { plugins: unknown[] }) => {
       if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-        (config as any).plugins.push(
+        config.plugins.push(
           new BundleAnalyzerPlugin({
             analyzerMode: 'server',
             openAnalyzer: true,
