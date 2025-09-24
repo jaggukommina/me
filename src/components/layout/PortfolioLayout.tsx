@@ -1,9 +1,9 @@
 'use client';
 
-import { memo } from 'react';
-import ProfileCard from '@/components/sections/ProfileCard';
-import Navigation from '@/components/layout/Navigation';
 import ContentSwitcher from '@/components/layout/ContentSwitcher';
+import Navigation from '@/components/layout/Navigation';
+import ProfileCard from '@/components/sections/ProfileCard';
+import { memo } from 'react';
 import { useBodyClass } from '@/hooks/useBodyClass';
 
 interface PortfolioLayoutProps {

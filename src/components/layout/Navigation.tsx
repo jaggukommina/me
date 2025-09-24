@@ -16,13 +16,16 @@ export default function Navigation() {
   // Debug logging removed
 
   const handleNavClick = (sectionName: string) => {
+    // Get the base path from environment for GitHub Pages
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    
     // Prevent default browser navigation and use only context
     if (activeSection === sectionName) {
-      // Same section clicked - go to home (close details)
-      window.history.replaceState(null, '', '/');
+      // Same section clicked - go to home (close details) with base path
+      window.history.replaceState(null, '', `${basePath}/`);
     } else {
-      // Different section - update URL without navigation
-      window.history.replaceState(null, '', `/${sectionName}`);
+      // Different section - update URL without navigation with base path
+      window.history.replaceState(null, '', `${basePath}/${sectionName}`);
     }
     
     // Force context update after URL change

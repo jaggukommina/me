@@ -38,7 +38,6 @@ const ProfileCard: React.FC<ProfileCardProps> = memo(
             ))}
           </div>
         </div>
-        <blockquote>{propPersonalInfo.copyright}</blockquote>
       </>
     );
   }

@@ -2,41 +2,62 @@
 
 import { useState, useEffect } from 'react';
 
-export function useAppBootstrap() {
+interface BootstrapState {
+  isLoading: boolean;
+  isReady: boolean;
+  handleLoadingComplete: () => void;
+}
+
+export function useAppBootstrap(): BootstrapState {
   const [isLoading, setIsLoading] = useState(true);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
+    const waitForDocumentReady = (): Promise<void> => {
+      if (document.readyState === 'complete') {
+        return Promise.resolve();
+      }
+
+      return new Promise(resolve => {
+        const handler = () => {
+          if (document.readyState === 'complete') {
+            document.removeEventListener('readystatechange', handler);
+            resolve();
+          }
+        };
+        document.addEventListener('readystatechange', handler);
+      });
+    };
+
+    const waitForFonts = async (): Promise<void> => {
+      if (!('fonts' in document)) return;
+      
+      try {
+        await document.fonts.ready;
+      } catch {
+        // Gracefully handle font loading failures
+      }
+    };
+
     const initializeApp = async () => {
-      // Wait for DOM to be fully ready
-      if (document.readyState !== 'complete') {
-        await new Promise(resolve => {
-          const handler = () => {
-            if (document.readyState === 'complete') {
-              document.removeEventListener('readystatechange', handler);
-              resolve(void 0);
-            }
-          };
-          document.addEventListener('readystatechange', handler);
-        });
+      await Promise.all([
+        waitForDocumentReady(),
+        waitForFonts(),
+        new Promise(resolve => setTimeout(resolve, 50)) // Hydration buffer
+      ]);
+
+      if (isMounted) {
+        setIsReady(true);
       }
-
-      // Wait for fonts to load if available
-      if ('fonts' in document) {
-        try {
-          await document.fonts.ready;
-        } catch {
-          // Continue if font loading fails
-        }
-      }
-
-      // Additional delay to ensure React hydration is complete
-      await new Promise(resolve => setTimeout(resolve, 200));
-
-      setIsReady(true);
     };
 
     initializeApp();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleLoadingComplete = () => {

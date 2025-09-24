@@ -862,8 +862,8 @@ div.contact > div a:hover {
   transform: translateX(1px);
 }
 
-/* Simple Loading Screen */
-.simple-loading {
+/* Terminal Loading Screen */
+.terminal-loading {
   position: fixed;
   top: 0;
   left: 0;
@@ -876,25 +876,140 @@ div.contact > div a:hover {
   align-items: center;
   z-index: 9999;
   opacity: 1;
-  transition: opacity 0.5s ease-out;
+  transition: opacity 0.3s ease-out;
 }
 
-.simple-loading.fade-out {
+.terminal-loading.fade-out {
   opacity: 0;
 }
 
-.progress-number {
-  font-size: 4rem;
-  font-weight: bold;
+.terminal-container {
+  width: 90%;
+  max-width: 600px;
+  background-color: rgba(2, 4, 32, 0.95);
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(0, 203, 119, 0.2);
+  overflow: hidden;
+}
+
+.terminal-header {
+  background-color: rgba(0, 203, 119, 0.1);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.control.close {
+  background-color: #ff5f56;
+}
+
+.control.minimize {
+  background-color: #ffbd2e;
+}
+
+.control.maximize {
+  background-color: #27ca3f;
+}
+
+.terminal-title {
   color: var(--primary-color);
   font-family: 'Courier New', Courier, monospace;
-  text-shadow: 0 0 20px rgba(0, 203, 119, 0.3);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.terminal-body {
+  padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.terminal-line {
+  margin-bottom: 16px;
+}
+
+.prompt {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.command {
+  color: var(--secondary-color);
+  margin-left: 8px;
+}
+
+.loading-content {
+  margin-top: 20px;
+}
+
+.loading-message {
+  color: var(--secondary-color);
+  margin-bottom: 16px;
+  min-height: 20px;
+}
+
+.cursor {
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-right: 8px;
+  animation: blink 1s infinite;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background-color: rgba(0, 203, 119, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), rgba(0, 203, 119, 0.8));
+  border-radius: 4px;
+  transition: width 0.3s ease-out;
+  box-shadow: 0 0 8px rgba(0, 203, 119, 0.4);
+}
+
+.progress-text {
+  color: var(--primary-color);
+  font-weight: bold;
+  min-width: 50px;
+  text-align: right;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 .loading-footer {
-  position: absolute;
+  position: fixed;
   bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
+  z-index: 10000;
+  pointer-events: none;
 }
 
 .loading-footer p {
@@ -908,24 +1023,50 @@ div.contact > div a:hover {
 /* Smooth transitions after loading */
 .card, .explore, .details {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transform: translateY(15px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 .app-loaded .card {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.1s;
+  transition-delay: 0.05s;
 }
 
 .app-loaded .explore {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.3s;
+  transition-delay: 0.15s;
 }
 
 .app-loaded .details {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.5s;
+  transition-delay: 0.25s;
+}
+
+/* Portfolio footer - fixed centered position */
+.portfolio-footer {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.app-loaded .portfolio-footer {
+  opacity: 1;
+  transition-delay: 0.35s;
+}
+
+.portfolio-footer p {
+  color: var(--secondary-color);
+  font-size: 0.8rem;
+  margin: 0;
+  opacity: 0.5;
+  font-family: 'Courier New', Courier, monospace;
 }

@@ -25,7 +25,13 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   // Initialize state correctly from the start to prevent FOUC
   const getInitialState = (): NavigationState => {
     // Normalize pathname to handle base path
-    let normalizedPath = pathname.replace(/^\/me/, '') || '/';
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    let normalizedPath = pathname;
+    
+    // Remove base path if present
+    if (basePath && normalizedPath.startsWith(basePath)) {
+      normalizedPath = normalizedPath.replace(basePath, '') || '/';
+    }
     
     // Remove trailing slash except for root
     if (normalizedPath !== '/' && normalizedPath.endsWith('/')) {
@@ -62,7 +68,13 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const updateStateFromPath = () => {
       // Get current path from window.location for more accurate reading
-      let normalizedPath = window.location.pathname.replace(/^\/me/, '') || '/';
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      let normalizedPath = window.location.pathname;
+      
+      // Remove base path if present
+      if (basePath && normalizedPath.startsWith(basePath)) {
+        normalizedPath = normalizedPath.replace(basePath, '') || '/';
+      }
       
       // Remove trailing slash except for root
       if (normalizedPath !== '/' && normalizedPath.endsWith('/')) {
