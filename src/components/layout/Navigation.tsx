@@ -37,15 +37,7 @@ export default function Navigation() {
     
     setCurrentPath(normalizedPath);
     
-    // Debug logging for production troubleshooting
-    if (typeof window !== 'undefined') {
-      console.log('Navigation Debug:', {
-        originalPathname: pathname,
-        normalizedPath,
-        location: window.location.pathname,
-        basePath: process.env.NEXT_PUBLIC_BASE_PATH
-      });
-    }
+    // Debug logging removed for production
   }, [pathname]);
 
   const handleNavClick = (path: string) => {
@@ -94,9 +86,8 @@ export default function Navigation() {
           name={item.name}
           aria-pressed={isActive(item.path)}
           aria-label={`Navigate to ${item.label}${isActive(item.path) ? ' (currently active, click to return home)' : ''}`}
-          title={`Path: ${item.path}, Current: ${currentPath}, Active: ${isActive(item.path)}`}
         >
-          <span>{item.label}{isActive(item.path) ? ' ●' : ''}</span>
+          <span>{item.label}</span>
         </button>
       ))}
     </>

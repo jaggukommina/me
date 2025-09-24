@@ -12,19 +12,26 @@ export function useBodyClass() {
     // Normalize pathname - remove base path if present
     const normalizedPath = pathname.replace(/^\/me/, '') || '/';
     
-    // Remove existing classes
-    body.classList.remove('closed', 'opened');
+    // Determine target class
+    const targetClass = normalizedPath === '/' ? 'closed' : 'opened';
+    const otherClass = targetClass === 'closed' ? 'opened' : 'closed';
     
-    // Add appropriate class based on route
-    if (normalizedPath === '/') {
-      body.classList.add('closed');
-    } else {
-      body.classList.add('opened');
+    // Only change if different to avoid unnecessary DOM manipulation
+    if (!body.classList.contains(targetClass)) {
+      // Add a small delay to prevent flash during navigation
+      const timeoutId = setTimeout(() => {
+        body.classList.remove(otherClass);
+        body.classList.add(targetClass);
+      }, 10); // Small delay to let the route change settle
+      
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
     
     return () => {
-      // Cleanup on unmount
-      body.classList.remove('closed', 'opened');
+      // Cleanup on unmount - only if component is actually unmounting
+      // Don't remove classes during normal navigation
     };
   }, [pathname]);
 }
