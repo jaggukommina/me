@@ -861,3 +861,71 @@ div.contact > div a:hover {
 .explore > button.active {
   transform: translateX(1px);
 }
+
+/* Simple Loading Screen */
+.simple-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--primary-bg-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+.simple-loading.fade-out {
+  opacity: 0;
+}
+
+.progress-number {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  font-family: 'Courier New', Courier, monospace;
+  text-shadow: 0 0 20px rgba(0, 203, 119, 0.3);
+}
+
+.loading-footer {
+  position: absolute;
+  bottom: 2rem;
+  text-align: center;
+}
+
+.loading-footer p {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.6;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Smooth transitions after loading */
+.card, .explore, .details {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.app-loaded .card {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.app-loaded .explore {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+.app-loaded .details {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}

@@ -27,21 +27,27 @@ export function useBodyClass() {
     const targetClass = isDetailsOpen ? 'opened' : 'closed';
     const otherClass = targetClass === 'closed' ? 'opened' : 'closed';
     
-    // Debounce class changes to prevent rapid switching
-    timeoutRef.current = setTimeout(() => {
-      const frameId = requestAnimationFrame(() => {
-        // Batch DOM operations
-        body.classList.remove(otherClass);
-        body.classList.add(targetClass);
+    // Apply immediately for first render to prevent FOUC
+    if (lastStateRef.current === isDetailsOpen) {
+      body.classList.remove(otherClass);
+      body.classList.add(targetClass);
+    } else {
+      // Debounce subsequent changes
+      timeoutRef.current = setTimeout(() => {
+        const frameId = requestAnimationFrame(() => {
+          // Batch DOM operations
+          body.classList.remove(otherClass);
+          body.classList.add(targetClass);
+          
+          // Force layout to prevent jitter
+          void body.offsetHeight;
+        });
         
-        // Force layout to prevent jitter
-        void body.offsetHeight;
-      });
-      
-      return () => {
-        cancelAnimationFrame(frameId);
-      };
-    }, 16); // One frame delay
+        return () => {
+          cancelAnimationFrame(frameId);
+        };
+      }, 16); // One frame delay
+    }
     
     return () => {
       if (timeoutRef.current) {

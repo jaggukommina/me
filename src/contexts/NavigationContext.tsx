@@ -11,6 +11,7 @@ type NavigationState = {
 type NavigationContextType = {
   activeSection: string | null;
   isDetailsOpen: boolean;
+  isInitialized: boolean;
   openSection: (section: string) => void;
   closeDetails: () => void;
   toggleSection: (section: string) => void;
@@ -20,10 +21,42 @@ const NavigationContext = createContext<NavigationContextType | undefined>(undef
 
 export function NavigationProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [state, setState] = useState<NavigationState>({
-    activeSection: null,
-    isDetailsOpen: false,
-  });
+  
+  // Initialize state correctly from the start to prevent FOUC
+  const getInitialState = (): NavigationState => {
+    // Normalize pathname to handle base path
+    let normalizedPath = pathname.replace(/^\/me/, '') || '/';
+    
+    // Remove trailing slash except for root
+    if (normalizedPath !== '/' && normalizedPath.endsWith('/')) {
+      normalizedPath = normalizedPath.slice(0, -1);
+    }
+
+    if (normalizedPath === '/') {
+      return {
+        activeSection: null,
+        isDetailsOpen: false,
+      };
+    } else {
+      const sectionName = normalizedPath.replace('/', '');
+      const validSections = ['about', 'skills', 'experience', 'education', 'contact'];
+      
+      if (validSections.includes(sectionName)) {
+        return {
+          activeSection: sectionName,
+          isDetailsOpen: true,
+        };
+      }
+    }
+
+    return {
+      activeSection: null,
+      isDetailsOpen: false,
+    };
+  };
+
+  const [state, setState] = useState<NavigationState>(getInitialState);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize state based on current route
   useEffect(() => {
@@ -54,6 +87,9 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
           });
         }
       }
+      
+      // Mark as initialized after first update
+      setIsInitialized(true);
     };
 
     // Initial state setup
@@ -106,6 +142,7 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   const value: NavigationContextType = {
     activeSection: state.activeSection,
     isDetailsOpen: state.isDetailsOpen,
+    isInitialized,
     openSection,
     closeDetails,
     toggleSection,
