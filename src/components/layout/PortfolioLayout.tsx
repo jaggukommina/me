@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { memo } from 'react';
 import ProfileCard from '@/components/sections/ProfileCard';
 import Navigation from '@/components/layout/Navigation';
 import { useBodyClass } from '@/hooks/useBodyClass';
@@ -8,6 +9,12 @@ import { useBodyClass } from '@/hooks/useBodyClass';
 interface PortfolioLayoutProps {
   children: React.ReactNode;
 }
+
+// Memoize the ProfileCard to prevent unnecessary re-renders
+const MemoizedProfileCard = memo(ProfileCard);
+
+// Memoize the Navigation to prevent unnecessary re-renders
+const MemoizedNavigation = memo(Navigation);
 
 export default function PortfolioLayout({ children }: PortfolioLayoutProps) {
   const pathname = usePathname();
@@ -21,10 +28,10 @@ export default function PortfolioLayout({ children }: PortfolioLayoutProps) {
   return (
     <>
       <div className="card">
-        <ProfileCard />
+        <MemoizedProfileCard />
       </div>
       <div className="explore">
-        <Navigation />
+        <MemoizedNavigation />
       </div>
       {!isHomePage && (
         <div className="details">

@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
 export function useBodyClass() {
   const pathname = usePathname();
+  const lastPathRef = useRef<string>('');
 
   useEffect(() => {
     const body = document.body;
@@ -12,26 +13,28 @@ export function useBodyClass() {
     // Normalize pathname - remove base path if present
     const normalizedPath = pathname.replace(/^\/me/, '') || '/';
     
+    // Skip if path hasn't actually changed
+    if (lastPathRef.current === normalizedPath) {
+      return;
+    }
+    
+    lastPathRef.current = normalizedPath;
+    
     // Determine target class
     const targetClass = normalizedPath === '/' ? 'closed' : 'opened';
     const otherClass = targetClass === 'closed' ? 'opened' : 'closed';
     
     // Only change if different to avoid unnecessary DOM manipulation
     if (!body.classList.contains(targetClass)) {
-      // Add a small delay to prevent flash during navigation
-      const timeoutId = setTimeout(() => {
+      // Use requestAnimationFrame for smoother transitions
+      const frameId = requestAnimationFrame(() => {
         body.classList.remove(otherClass);
         body.classList.add(targetClass);
-      }, 10); // Small delay to let the route change settle
+      });
       
       return () => {
-        clearTimeout(timeoutId);
+        cancelAnimationFrame(frameId);
       };
     }
-    
-    return () => {
-      // Cleanup on unmount - only if component is actually unmounting
-      // Don't remove classes during normal navigation
-    };
   }, [pathname]);
 }
