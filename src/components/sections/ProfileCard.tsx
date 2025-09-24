@@ -12,7 +12,7 @@ interface ProfileCardProps {
 const ProfileCard: React.FC<ProfileCardProps> = memo(
   ({ personalInfo: propPersonalInfo = personalInfo }) => {
     const { imageSrc } = useImageLoader(propPersonalInfo.profileImage, {
-      fallbackSrc: "/person-icon.svg",
+      fallbackSrc: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/person-icon.svg`,
       timeout: 8000,
     });
 

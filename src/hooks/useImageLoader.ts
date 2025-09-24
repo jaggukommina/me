@@ -18,7 +18,7 @@ export const useImageLoader = (
   src: string,
   options: UseImageLoaderOptions = {}
 ): UseImageLoaderReturn => {
-  const { fallbackSrc = '/person-icon.svg', timeout = 10000 } = options;
+  const { fallbackSrc = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/person-icon.svg`, timeout = 10000 } = options;
   
   const [imageSrc, setImageSrc] = useState<string>(fallbackSrc);
   const [isLoading, setIsLoading] = useState<boolean>(true);

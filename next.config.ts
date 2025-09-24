@@ -3,9 +3,16 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // GitHub Pages configuration
   output: 'export',
+  basePath: '/me',
+  assetPrefix: '/me',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   distDir: 'out',
+  
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_BASE_PATH: '/me',
+  },
   
   // Production optimizations
   compress: true,
