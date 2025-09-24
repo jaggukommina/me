@@ -19,7 +19,9 @@ git push origin main
 1. Go to your repository on GitHub
 2. Navigate to **Settings** → **Pages**
 3. Under **Source**, select **GitHub Actions**
-4. The workflow will automatically deploy your site
+4. The workflow will automatically deploy your site on every push to main branch
+
+**Important:** Make sure your repository is public, or you have GitHub Pro/Team for private repository Pages deployment.
 
 ### 3. Access Your Site
 
@@ -56,6 +58,9 @@ npm run deploy
 - ✅ Automated build and deployment on push to main branch
 - ✅ Includes linting and type checking
 - ✅ Proper permissions for GitHub Pages deployment
+- ✅ Concurrent deployment protection
+- ✅ Manual workflow dispatch option
+- ✅ Automatic .nojekyll file creation
 
 ### Static Export Compatibility
 - ✅ Added `dynamic = 'force-static'` to sitemap
