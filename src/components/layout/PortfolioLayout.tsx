@@ -11,7 +11,9 @@ interface PortfolioLayoutProps {
 
 export default function PortfolioLayout({ children }: PortfolioLayoutProps) {
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  // Normalize pathname - remove base path if present
+  const normalizedPath = pathname.replace(/^\/me/, '') || '/';
+  const isHomePage = normalizedPath === '/';
   
   // Apply body classes based on current route
   useBodyClass();

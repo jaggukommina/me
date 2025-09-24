@@ -9,11 +9,14 @@ export function useBodyClass() {
   useEffect(() => {
     const body = document.body;
     
+    // Normalize pathname - remove base path if present
+    const normalizedPath = pathname.replace(/^\/me/, '') || '/';
+    
     // Remove existing classes
     body.classList.remove('closed', 'opened');
     
     // Add appropriate class based on route
-    if (pathname === '/') {
+    if (normalizedPath === '/') {
       body.classList.add('closed');
     } else {
       body.classList.add('opened');
